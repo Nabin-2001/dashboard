@@ -1,0 +1,15 @@
+.container-fluid{
+    padding-left: 15%;
+  }
+  @media only screen and (max-width: 900px) {
+    .container-fluid{
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    
+    
+  }
+  .categry_img{
+    width: 5rem;
+    height: 5rem;
+  }
