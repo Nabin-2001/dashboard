@@ -1,335 +1,386 @@
+import React, { useState, useEffect } from "react";
+
 import axios from "axios";
-import React, { useEffect, useReducer, useState } from "react";
-import { Button, Dropdown, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { toast } from "react-toastify";
-import { Store } from "../Store";
-import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox";
-import { getError } from "../utils";
-import "../styles/product.css";
+import { Link } from "react-router-dom";
+import { url } from "./../Api/api";
+
+import "../styles/category.css";
+
+import { FaTrash } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
+import Button from "react-bootstrap/Button";
+
+import Form from "react-bootstrap/Form";
+
 import Modal from "react-bootstrap/Modal";
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "FETCH_REQUEST":
-      return { ...state, loading: true };
-    case "FETCH_SUCCESS":
-      return { ...state, products: action.payload, loading: false };
-    case "FETCH_FAIL":
-      return { ...state, loading: false, error: action.payload };
-    case "CREATE_REQUEST":
-      return { ...state, loadingCreate: true };
-    case "CREATE_SUCCESS":
-      return {
-        ...state,
-        loadingCreate: false,
-      };
-    case "CREATE_FAIL":
-      return { ...state, loadingCreate: false };
-    case "DELETE_REQUEST":
-      return { ...state, loadingDelete: true, successDelete: false };
-    case "DELETE_SUCCESS":
-      return {
-        ...state,
-        loadingDelete: false,
-        successDelete: true,
-      };
-    case "DELETE_FAIL":
-      return { ...state, loadingDelete: false, successDelete: false };
-
-    case "DELETE_RESET":
-      return { ...state, loadingDelete: false, successDelete: false };
-
-    default:
-      return state;
-  }
-};
+const token = localStorage.getItem("admin_token");
 
 const Productlist = () => {
-  const [
-    { loading, products, error, loadingCreate, loadingDelete, successDelete },
-    dispatch,
-  ] = useReducer(reducer, {
-    products: [],
-    loading: true,
-    error: "",
-  });
-
-  const navigate = useNavigate();
+  const [product, setProduct] = useState();
 
   const [show, setShow] = useState(false);
 
+  const [createProduct, setCreateProduct] = useState({
+    product_title: "",
+
+    sku_code: "",
+
+    no_of_products: "",
+
+    actual_price: "",
+
+    selling_price: "",
+
+    color: "",
+
+    sub_category: "",
+
+    description: "",
+
+    brand: "",
+
+    category: "",
+
+    images1: "",
+
+    images2: "",
+
+    thumbnail: "",
+  });
+
   const handleClose = () => setShow(false);
+
   const handleShow = () => setShow(true);
 
-  const [companyList, setCompanyList] = useState([{}]);
-  const [subcategorieList, setCategorieList] = useState([]);
+  //fetching product
 
-  const [dropdownHandler, setDropdownHandler] = useState("");
+  const fetchproduct = () => {
+    axios
 
+      .get(`${url}all-products`, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      })
 
-  useEffect(()=>{
-     axios.get("http://16.170.252.94:8000/super-admin/all-products/")
-     .then((res)=>{
-      console.log("response data",res)
-     })
-     .catch((err)=>{
-      console.log("err data contain",err)
-  })
-  },[])
+      .then((res) => {
+        setProduct(res.data.data);
+
+        console.log(product);
+      })
+
+      .catch((err) => console.log(err));
+  };
+
+  //deleting producting
+
+  const deleteProduct = (item) => {
+    axios
+
+      .delete(`${url}delete-product/${item.id}`, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        },
+      })
+
+      .then((res) => fetchproduct());
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    setCreateProduct({ ...createProduct, [name]: value });
+  };
+  const handleFileChange = (event) => {
+    setCreateProduct({
+      ...createProduct,
+      [event.target.name]: event.target.files[0],
+    });
+  };
+
+  //creating product
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("product_title", createProduct.product_title);
+    formData.append("sku_code", createProduct.sku_code);
+    formData.append("no_of_products", createProduct.no_of_products);
+    formData.append("actual_price", createProduct.actual_price);
+    formData.append("selling_price", createProduct.selling_price);
+    formData.append("color", createProduct.color);
+    formData.append("sub_category", createProduct.sub_category);
+    formData.append("description", createProduct.description);
+    formData.append("brand", createProduct.brand);
+    formData.append("category", createProduct.category);
+    formData.append("images", createProduct.images);
+    formData.append("images", createProduct.images);
+    formData.append("thumbnail", createProduct.thumbnail);
+
+    try {
+      axios
+        .post(`http://13.50.236.236/super-admin/add-product/`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(createProduct.product_title);
+    console.log(createProduct.sku_code);
+    console.log(createProduct.no_of_products);
+    console.log(createProduct.actual_price);
+    console.log(createProduct.selling_price);
+    console.log(createProduct.color);
+    console.log(createProduct.sub_category);
+    console.log(createProduct.description);
+    console.log(createProduct.brand);
+    console.log(createProduct.category);
+    console.log(createProduct.images1);
+    console.log(createProduct.images2);
+    console.log(createProduct.thumbnail);
+  };
+
   useEffect(() => {
-    // const fetchData = async () => {
-    //   dispatch({ type: "FETCH_REQUEST" });
-    //   try {
-    //     const result = await axios.get(
-    //       "http://16.170.252.94:8000/super-admin/all-products/"
-    //     );
-    //     console.log("data contain",result)
-    //     dispatch({ type: "FETCH_SUCCESS", payload: result.data.data });
-       
-    //   } catch (err) {
-    //     dispatch({ type: "FETCH_FAIL", payload: err.message });
-    //     console.log(err)
-    //   }
-    // };
-    // fetchData();
-      
-   
-     
-
-    const fetchDatas = async () => {
-      return axios
-        .get("http://16.170.252.94:8000/super-admin/all-category/")
-        .then((result) => {
-          const res = result.data.data;
-          setCompanyList(res);
-          return res;
-        });
-    };
-    console.log(companyList);
-    const country = [new Set(companyList.map((item) => item.id))];
-    console.log(country);
-
-    const dropdownHandler = async () => {
-      return axios
-        .get(
-          `http://16.170.252.94:8000/super-admin/particular-category-sub-category-list/${6}/`
-        )
-        .then((results) => {
-          const ress = results.data.data;
-          console.log(ress);
-          setCategorieList(ress);
-          return ress;
-        });
-    };
-
-    fetchDatas();
-
-    dropdownHandler();
+    fetchproduct();
   }, []);
 
-  const createHandler = async () => {
-    if (window.confirm("Are you sure to create ?")) {
-      try {
-        dispatch({ type: "CREATE_REQUEST" });
-        const { data } = await axios.post(
-          "http://16.170.252.94:8000/super-admin/add-product/",
-          {}
-        );
-        toast.success("product created successfully");
-        dispatch({ type: "CREATE_SUCCESS" });
-        navigate(`product/${data.product.id}`);
-      } catch (err) {
-        toast.error(getError(error));
-        dispatch({
-          type: "CREATE_FAIL",
-        });
-      }
-    }
-  };
-
-  const deleteHandler = async (product) => {
-    if (window.confirm("Are you sure to delete?")) {
-      try {
-        await axios.delete(
-          `http://16.170.252.94:8000/super-admin/delete-product/${product.id}/`
-        );
-        toast.success("product deleted successfully");
-        dispatch({ type: "DELETE_SUCCESS" });
-      } catch (err) {
-        toast.error(getError(error));
-        dispatch({
-          type: "DELETE_FAIL",
-        });
-      }
-    }
-  };
-
   return (
-    <div className="container-fluid">
-      <Row>
-        <Col>
-          <h1 style={{ padding: "20px" }}>Products List</h1>
-        </Col>
-        <Col className="col text-end">
-          <div>
-            <Button type="button" onClick={handleShow}>
-              Create Productlist
-            </Button>
-          </div>
-        </Col>
-      </Row>
+    <>
+      <div className="container-fluid">
+        <div>
+          <button
+            className="btn btn-primary"
+            style={{ float: "right" }}
+            onClick={handleShow}
+          >
+            Create Product{" "}
+          </button>
+        </div>
 
-      {loadingCreate && <LoadingBox></LoadingBox>}
-      {loadingDelete && <LoadingBox></LoadingBox>}
-
-      {loading ? (
-        <LoadingBox></LoadingBox>
-      ) : error ? (
-        <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
         <table className="table">
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Name</th>
-              <th>Price</th>
+              <th>Sl NO</th>
+
+              <th>Title</th>
+
               <th>Category</th>
-              <th>Sub-Category</th>
-              <th>Brand</th>
-              <th>Total-products</th>
-              <th>ACTIONS</th>
+
+              <th>image</th>
+
+              <th> Actual Price</th>
+
+              <th>Selling price</th>
+
+              <th>Delete product</th>
+              <th>edit Product</th>
             </tr>
           </thead>
+
           <tbody>
-            {products.map((product) => (
-              <tr key={product.id}>
-                <td>{product.id}</td>
-                <td>{product.product_title}</td>
-                <td>{product.selling_price}/-</td>
-                <td>{product.category.category}</td>
-                <td>{product.sub_category.sub_category}</td>
-                <td>{product.brand.brand_name}</td>
-                <td>{product.no_of_products}</td>
-                <td>
-                  <Button
-                    type="button"
-                    variant="light"
-                    onClick={() => navigate(`/product/${product.id}`)}
-                  >
-                    Edit
-                  </Button>
-                  &nbsp;
-                  <Button
-                    type="button"
-                    variant="danger"
-                    onClick={() => deleteHandler(product)}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
+            {product &&
+              product.map((item, index) => {
+                return (
+                  <>
+                    <tr key={item.id}>
+                      <td>{index + 1}</td>
+
+                      <td>{item.product_title}</td>
+
+                      <td>{item.category.category}</td>
+
+                      <td>
+                        <img
+                          src={"http://13.50.236.236" + item.thumbnail}
+                          alt=""
+                          className="categry_img"
+                        />
+                      </td>
+
+                      <td>{item.actual_price}</td>
+
+                      <td>{item.selling_price}</td>
+
+                      <td>
+                        <span
+                          style={{ color: "red" }}
+                          onClick={() => deleteProduct(item)}
+                        >
+                          <FaTrash size={20} />
+                        </span>
+                      </td>
+                      <td>
+                        <Link to={`/ProductEditscreen/${item.id}`}>
+                          <MdEdit style={{ color: "#30aed9" }} />
+                        </Link>
+                      </td>
+                    </tr>
+                  </>
+                );
+              })}
           </tbody>
         </table>
-      )}
-
-      <Modal
-        show={show}
-        onHide={handleClose}
-        dialogClassName="modal-90w"
-        aria-labelledby="example-custom-modal-styling-title"
-      >
+      </div>
+      //code for modal
+      <Modal show={show} size="lg" onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title id="example-custom-modal-styling-title">
-            Creating Category List
-          </Modal.Title>
+          <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Product Title</Form.Label>
-              <Form.Control type="text" placeholder="Product Title" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Description</Form.Label>
-              <Form.Control type="text" placeholder="Product Description" />
+          <Form onSubmit={handleSubmit}>
+            <Form.Group
+              className="mb-3 d-flex"
+              controlId="exampleForm.ControlInput1"
+            >
+              <Form.Control
+                type="text"
+                placeholder="Product_Title"
+                name="product_title"
+                autoFocus
+                onChange={handleInputChange}
+              />
+
+              <Form.Control
+                type="number"
+                placeholder="SKU CODE"
+                name="sku_code"
+                onChange={handleInputChange}
+                autoFocus
+              />
             </Form.Group>
 
-            <br />
+            <Form.Group
+              className="mb-3 d-flex"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Control
+                type="number"
+                placeholder="No of product"
+                name="no_of_products"
+                autoFocus
+                onChange={handleInputChange}
+              />
 
-            {/* <div className="row">
-              <div className="col">
-                <label>category</label>
-                <br />
-                <select
-                  className="from-control"
-                  onClick={(e) => setDropdownHandler(e.target.value)}
-                  defaultValue={"muzeef"}
-                >
-                  <option value="">Choose category</option>
+              <Form.Control
+                type="number"
+                placeholder="Actual price"
+                name="actual_price"
+                autoFocus
+                onChange={handleInputChange}
+              />
+            </Form.Group>
 
-                  {companyList.map((company) => (
-                    <option value={company.id} key={company.id}>
-                      {company.category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="col">
-                <label>Sub-category</label>
-                <select className="from-control">
-                  <option value="">Choose sub-category</option>
-                  {subcategorieList.map((companys) => (
-                    <option value={companys.id} key={companys.id}>
-                      {companys.sub_category}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div> */}
+            <Form.Group
+              className="mb-3 d-flex"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Control
+                type="number"
+                placeholder="Selling Price"
+                name="selling_price"
+                autoFocus
+                onChange={handleInputChange}
+              />
 
-            <br />
+              <Form.Control
+                type="text"
+                placeholder="Colour"
+                name="color"
+                autoFocus
+                onChange={handleInputChange}
+              />
+            </Form.Group>
 
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>No of Products</Form.Label>
-              <Form.Control type="text" placeholder="No of Products" />
+            <Form.Group
+              className="mb-3 d-flex"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Control
+                type="text"
+                placeholder="Description"
+                name="description"
+                autoFocus
+                onChange={handleInputChange}
+              />
+
+              <Form.Control
+                type="file"
+                placeholder="Image1"
+                name="images"
+                autoFocus
+                onChange={handleFileChange}
+              />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Actual Price</Form.Label>
-              <Form.Control type="text" placeholder="Product Title" />
+
+            <Form.Group
+              className="mb-3 d-flex"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Control
+                type="file"
+                placeholder="Image2"
+                name="images"
+                autoFocus
+                onChange={handleFileChange}
+              />
+
+              <Form.Control
+                type="file"
+                placeholder="Thumbnail"
+                name="thumbnail"
+                autoFocus
+                onChange={handleFileChange}
+              />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Selling Price</Form.Label>
-              <Form.Control type="text" placeholder="Product Title" />
+
+            <Form.Group
+              className="mb-3 d-flex"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Control
+                type="number"
+                placeholder="Sub Category"
+                name="sub_category"
+                autoFocus
+                onChange={handleInputChange}
+              />
+
+              <Form.Control
+                type="number"
+                placeholder="category"
+                name="category"
+                autoFocus
+                onChange={handleInputChange}
+              />
             </Form.Group>
-            <Form.Group controlId="formFile" className="mb-3">
-              <Form.Label>Please Select File</Form.Label>
-              <Form.Control type="file" />
+
+            <Form.Group
+              className="mb-3 d-flex"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Control
+                type="number"
+                placeholder="brand"
+                name="brand"
+                autoFocus
+                onChange={handleInputChange}
+              />
             </Form.Group>
+
+            <button className="btn btn-primary" type="submit">
+              Submit
+            </button>
           </Form>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Please select color </Form.Label>
-            <Form.Control type="text" placeholder="color" />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Please select brand </Form.Label>
-            <Form.Control type="text" placeholder="brand" />
-          </Form.Group>
         </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary">Save Changes</Button>
-        </Modal.Footer>
       </Modal>
-    </div>
+    </>
   );
 };
 

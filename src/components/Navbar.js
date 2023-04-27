@@ -62,7 +62,7 @@ function Navbar({ visible, show }) {
             </li>
             {token ? <>
        <button className="btn btn-danger" onClick={logout}>logout</button>
-       </> :<></>
+       </> :<>      <button className="btn btn-danger" onClick={()=>navigate("/")}>login</button></>
     }
           </ul>
         </div>

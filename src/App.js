@@ -7,15 +7,22 @@ import { DashboardScreen } from "./screens/DashboardScreen";
 import Category from './screens/Category'
 import { User } from "./screens/User";
 import { Orders } from "./screens/Orders";
-import { SubCategory } from "./screens/SubCategory";
+
 import Login from "./screens/Login";
+import Editcategory from "./screens/Editcategory";
+import Subcategory from "./screens/Subcategory";
+import Editsubcategry from "./screens/Editsubcategry";
 
 function App() {
   const token = JSON.parse(localStorage.getItem("adminLoginStatus"))
  
   return (
     <BrowserRouter>
+    
+    
       <Navbar />
+      
+
       <Routes>
         <Route path="/" element={<Login />} />
          { token ? (
@@ -24,9 +31,12 @@ function App() {
  <Route path="/productlist" element={<Productlist />} />
  <Route path="/product/:id" element={<ProductEditScreen />} />
  <Route path="/category" element={<Category/>} />
- <Route path="/category/:id" element={<SubCategory />} />
+<Route exact path="/subcategory/:id" element={<Subcategory/>} />
  <Route path="/orders" element={<Orders />} />
+ <Route path="/productEditscreen/:id" element={<ProductEditScreen />} />
  <Route path="/user" element={<User />} />
+ <Route path="/editcategory/:id" element={<Editcategory/>}/>
+ <Route path="/editsubcategry/:id" element={<Editsubcategry />} />
  </>
          ):<>
          data contained

@@ -1,167 +1,278 @@
-import "../styles/category.css";
-import axios from "axios";
-import React, { useEffect, useReducer } from "react";
-import { Button } from "react-bootstrap";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { toast } from "react-toastify";
-import { Store } from "../Store";
-import LoadingBox from "../components/LoadingBox";
-import MessageBox from "../components/MessageBox";
-import { getError } from "../utils";
+import React, { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
+import axios from 'axios'
+import Swal from "sweetalert2";
+import { FaTrash } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
+const token = localStorage.getItem("admin_token");
+const url = "http://13.50.236.236";
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "FETCH_REQUEST":
-      return { ...state, loading: true };
-    case "FETCH_SUCCESS":
-      return { ...state, products: action.payload, loading: false };
-    case "FETCH_FAIL":
-      return { ...state, loading: false, error: action.payload };
-    case "CREATE_REQUEST":
-      return { ...state, loadingCreate: true };
-    case "CREATE_SUCCESS":
-      return {
-        ...state,
-        loadingCreate: false,
-      };
-    case "CREATE_FAIL":
-      return { ...state, loadingCreate: false };
-    case "DELETE_REQUEST":
-      return { ...state, loadingDelete: true, successDelete: false };
-    case "DELETE_SUCCESS":
-      return {
-        ...state,
-        loadingDelete: false,
-        successDelete: true,
-      };
-    case "DELETE_FAIL":
-      return { ...state, loadingDelete: false, successDelete: false };
+const SubCategory = () => {
+  
+const [subcategory,setsubcategory]=useState([])
+    const {id}=useParams()
+    function getstoredata() {
+      axios
+        .get(`http://13.50.236.236/super-admin/particular-category-sub-category-list/${id}/`)
+        .then((res) => {
+          setsubcategory(res.data.data);
+          console.log(subcategory);  
+          console.log(res.data.data)                                 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    useEffect(()=>{
+   getstoredata()
+    },[])
+    
 
-    case "DELETE_RESET":
-      return { ...state, loadingDelete: false, successDelete: false };
-
-    default:
-      return state;
-  }
-};
-
-export const SubCategory = () => {
-  const [
-    { loading, products, error, loadingCreate, loadingDelete, successDelete },
-    dispatch,
-  ] = useReducer(reducer, {
-    products: [],
-    loading: true,
-    error: "",
-  });
-
-  const navigate = useNavigate();
-  const params = useParams(); // /product/:id
-  const { id: productId } = params;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      dispatch({ type: "FETCH_REQUEST" });
-      try {
-        const result = await axios.get(
-          `http://16.170.252.94:8000/super-admin/particular-category-sub-category-list/${productId}/`
-        );
-        dispatch({ type: "FETCH_SUCCESS", payload: result.data.data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: err.message });
-      }
+    const deleteitem = (id) => {
+      axios
+        .delete(`http://13.50.236.236/super-admin/delete-sub-category/${id}/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+  
+        .then((res) => {
+          if (res.data.status == 200) {
+            Swal.fire({
+              position: "top-middle",
+              icon: "success",
+              title: "product deleted successfully",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            getstoredata();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     };
-    fetchData();
-  }, []);
+    
 
-  const createHandler = async () => {
-    if (window.confirm("Are you sure to create?")) {
-      try {
-        dispatch({ type: "CREATE_REQUEST" });
-        const { data } = await axios.post(
-          "http://16.170.252.94:8000/super-admin/add-product/",
-          {}
-        );
-        toast.success("product created successfully");
-        dispatch({ type: "CREATE_SUCCESS" });
-        navigate(`product/${data.product.id}`);
-      } catch (err) {
-        toast.error(getError(error));
-        dispatch({
-          type: "CREATE_FAIL",
-        });
+
+    // add =============================================================================================================================
+    const [Data, setData] = useState({
+      category:id,
+      sub_cat_id:"",
+      sub_category:"",
+      sub_category_img: "",
+    });
+  
+    const handleChange = (event) => {
+      setData({
+        ...Data,
+        [event.target.name]: event.target.value,
+      });
+    };
+  
+    const handleFileChange = (event) => {
+      setData({
+        ...Data,
+        [event.target.name]: event.target.files[0],
+      });
+    };
+ 
+    const submitForm = (event) => {
+      event.preventDefault();
+      console.log(Data.category)
+      console.log(Data)
+      const formData = new FormData();
+      if (Data.category_name === "") {
       }
-    }
-  };
-
-  const deleteHandler = async (product) => {
-    if (window.confirm("Are you sure to delete?")) {
+      formData.append("category",Data.category);
+      formData.append("sub_cat_id",Data.sub_cat_id)
+      formData.append("sub_category", Data.sub_category);
+      formData.append("sub_category_img", Data.sub_category_img);
       try {
-        await axios.delete(
-          `http://16.170.252.94:8000/super-admin/delete-sub-category/${product.id}/`
-        );
-        toast.success("product deleted successfully");
-        dispatch({ type: "DELETE_SUCCESS" });
-      } catch (err) {
-        toast.error(getError(error));
-        dispatch({
-          type: "DELETE_FAIL",
-        });
+        axios
+          .post("http://13.50.236.236/super-admin/add-sub-category/", formData, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+          console.log(res)
+            if (res.data.status == 200) {
+              Swal.fire({
+                position: "top-middle",
+                icon: "success",
+                title: "product added",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              getstoredata();
+            
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                
+              });
+            }
+          });
+      } catch (error) {
+        alert("somthing");
       }
-    }
-  };
 
+    }
+    // add subcategory end ==========================================================================================================================
+    
   return (
-    <div className="container-fluid">
-      <h1 style={{ padding: "20px" }}>Sub - Category List</h1>
-      <Row>
-        <Col></Col>
-        <Col className="col text-end">
-          <div>
-            <Button type="button" onClick={createHandler}>
-              Create Productlist
-            </Button>
-          </div>
-        </Col>
-      </Row>
-
-      {loadingCreate && <LoadingBox></LoadingBox>}
-      {loadingDelete && <LoadingBox></LoadingBox>}
-
-      {loading ? (
-        <LoadingBox></LoadingBox>
-      ) : error ? (
-        <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
-        <table className="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>SUB - CATEGORY</th>
-              <th>ACTIONS</th>
+    <div className='container'>
+      <h1 className='text-center'>Sub-Category</h1>
+    <button
+          type="button"
+          className="btn btn-primary float-end"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModa3"
+        >
+          Add subcategory
+        </button>
+       <table class="table">
+  <thead>
+    <tr className="text-center">
+      <th scope="col">Num</th>
+      <th scope="col">img</th>
+      <th scope="col">Sub_category</th>
+      <th scope="col">Action</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    {
+      subcategory.map((item,index)=>{
+        return(
+          <>
+            <tr className="text-center">
+              <td>{index+1}</td>
+              <td>
+              <img
+                        src={url + item.sub_category_img}
+                        className="categry_img"
+                       
+                      />
+              </td>
+              <td>
+                {item.sub_category}
+              </td>
+              <td>
+              <span
+                        className="btn btn-danger me-2"
+                        onClick={() => deleteitem(item.id)}
+                      >
+                        <FaTrash size={20} />
+                      </span>
+                      <Link to={`/editsubcategry/${item.id}`} target="_blank" >
+                      <span className=' btn btn-danger'  >
+                      <MdEdit style={{color:"white"}} />
+                      </span>
+                      </Link>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product.id}>
-                <td>{product.id}</td>
-                <td>{product.sub_category}</td>
-                <td>
-                  <Button
-                    type="button"
-                    variant="danger"
-                    onClick={() => deleteHandler(product)}
-                  >
-                    Delete
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+          </>
+        )
+      })
+    }
+   
+  </tbody>
+</table>
+  <div>
+
+  </div>
+      {/* add subcategory  */}
+      <div
+        className="modal fade"
+        id="exampleModa3"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title text-center" id="exampleModalLabel">
+                Add product category
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <form>
+              {/* <div className="row mb-3">
+                  <div className="col-sm-10">
+                    <input
+                      type="number"
+                      name="category"
+                      onChange={handleChange}
+                      className="form-control"
+                      placeholder="Category name"
+                      
+                    />
+                  </div>
+                </div> */}
+                {/* <div className="row mb-3">
+                  <div className="col-sm-10">
+                    <input
+                      type="number"
+                      name="sub_cat_id"
+                      onChange={handleChange}
+                      className="form-control"
+                      placeholder="Category name"
+                    />
+                  </div>
+                </div> */}
+                <div className="row mb-3">
+                  <div className="col-sm-10">
+                    <input
+                      type="text"
+                      name="sub_category"
+                      onChange={handleChange}
+                      className="form-control"
+                      placeholder="Category name"
+                    />
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <div className="col-sm-10">
+                    <input
+                      name="sub_category_img"
+                      onChange={handleFileChange}
+                      className="form-control"
+                      type="file"
+                      id="formFile"
+                    />
+                  </div>
+                </div>
+                <div className="row mb-3">
+                  <div className="col-sm-10">
+                    <button
+                      type="submit"
+                      onClick={submitForm}
+                      className="btn btn-primary "
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      Submit Form
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  );
-};
+  )
+}
+
+export default SubCategory
