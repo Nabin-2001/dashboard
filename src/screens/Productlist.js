@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { url } from "./../Api/api";
 
 import "../styles/category.css";
@@ -20,6 +20,8 @@ const Productlist = () => {
   const [product, setProduct] = useState();
 
   const [show, setShow] = useState(false);
+   
+  const {id}=useParams()
 
   const [createProduct, setCreateProduct] = useState({
     product_title: "",
@@ -34,13 +36,13 @@ const Productlist = () => {
 
     color: "",
 
-    sub_category: "",
+    sub_category:id,
 
     description: "",
 
     brand: "",
 
-    category: "",
+    category:localStorage.getItem("Cateid"),
 
     images1: "",
 
@@ -340,7 +342,7 @@ const Productlist = () => {
               />
             </Form.Group>
 
-            <Form.Group
+            {/* <Form.Group
               className="mb-3 d-flex"
               controlId="exampleForm.ControlTextarea1"
             >
@@ -359,7 +361,7 @@ const Productlist = () => {
                 autoFocus
                 onChange={handleInputChange}
               />
-            </Form.Group>
+            </Form.Group> */}
 
             <Form.Group
               className="mb-3 d-flex"

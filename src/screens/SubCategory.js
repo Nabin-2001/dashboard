@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import Swal from "sweetalert2";
 import { FaTrash } from "react-icons/fa";
@@ -8,6 +8,7 @@ const token = localStorage.getItem("admin_token");
 const url = "http://13.50.236.236";
 
 const SubCategory = () => {
+  const Navigate = useNavigate()
   
 const [subcategory,setsubcategory]=useState([])
     const {id}=useParams()
@@ -122,7 +123,14 @@ const [subcategory,setsubcategory]=useState([])
 
     }
     // add subcategory end ==========================================================================================================================
-    
+    const sub1 =(id) =>{
+  Navigate(`/subcategrysub/${id}`)
+ 
+
+      
+    }
+    const filterdata = subcategory.filter(item=>!item.sub_cat_id)
+    console.log("filterdata",filterdata)
   return (
     <div className='container'>
       <h1 className='text-center'>Sub-Category</h1>
@@ -134,7 +142,7 @@ const [subcategory,setsubcategory]=useState([])
         >
           Add subcategory
         </button>
-       <table class="table">
+      <table class="table">
   <thead>
     <tr className="text-center">
       <th scope="col">Num</th>
@@ -146,13 +154,14 @@ const [subcategory,setsubcategory]=useState([])
   </thead>
   <tbody>
     {
-      subcategory.map((item,index)=>{
+      filterdata.map((item,index)=>{
+        console.log(item.sub_cat_id)
         return(
           <>
             <tr className="text-center">
               <td>{index+1}</td>
               <td>
-              <img
+              <img  onClick={()=>sub1(item.id)}
                         src={url + item.sub_category_img}
                         className="categry_img"
                        
@@ -271,6 +280,7 @@ const [subcategory,setsubcategory]=useState([])
           </div>
         </div>
       </div>
+      {/* end */}
     </div>
   )
 }

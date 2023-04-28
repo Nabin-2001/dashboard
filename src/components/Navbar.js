@@ -37,7 +37,7 @@ function Navbar({ visible, show }) {
               </a>
             </li>
             <li>
-              <a href="/productlist" className="nav-link">
+              <a href="/productlist/" className="nav-link">
                 <FaInfo size={ICON_SIZE} />
                 <span>Products</span>
               </a>
