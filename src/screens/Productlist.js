@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { url } from "./../Api/api";
-
+import Swal from "sweetalert2";
 import "../styles/category.css";
 
 import { FaTrash } from "react-icons/fa";
@@ -57,7 +57,7 @@ const Productlist = () => {
 
   //fetching product
 
-  const fetchproduct = () => {
+  function fetchproduct() {
     axios
 
       .get(`${url}all-products`, {
@@ -86,7 +86,22 @@ const Productlist = () => {
         },
       })
 
-      .then((res) => fetchproduct());
+      .then((res) => {
+        
+        if (res.data.status == 200) {
+          Swal.fire({
+            position: "top-middle",
+            icon: "success",
+            title: "product deleted successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          fetchproduct()
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleInputChange = (event) => {
@@ -128,7 +143,25 @@ const Productlist = () => {
           },
         })
         .then((res) => {
-          console.log(res);
+          console.log(res)
+          if (res.data.status == 200) {
+            Swal.fire({
+              position: "top-middle",
+              icon: "success",
+              title: "product added",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+           fetchproduct()
+          
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+              
+            });
+          }
         });
     } catch (error) {
       console.log(error);
@@ -241,6 +274,7 @@ const Productlist = () => {
               className="mb-3 d-flex"
               controlId="exampleForm.ControlInput1"
             >
+              
               <Form.Control
                 type="text"
                 placeholder="Product_Title"
@@ -339,6 +373,7 @@ const Productlist = () => {
                 name="thumbnail"
                 autoFocus
                 onChange={handleFileChange}
+               
               />
             </Form.Group>
 

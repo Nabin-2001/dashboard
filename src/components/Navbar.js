@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaThLarge,
   FaBars,
@@ -10,9 +10,11 @@ import {
   FaHandshake,
   FaTimes,
 } from "react-icons/fa";
-import { useNavigate } from "react-router";
+import { useNavigate} from "react-router";
+import { Link } from "react-router-dom";
+import Login from "../screens/Login";
 import "../styles/navbar.css";
-
+const token = localStorage.getItem("admin_token");
 const ICON_SIZE = 20;
 
 function Navbar({ visible, show }) {
@@ -22,11 +24,19 @@ function Navbar({ visible, show }) {
   const token = JSON.parse(localStorage.getItem("adminLoginStatus"))
   const logout = () =>{
     localStorage.clear()
-    navigate('/')
+    navigate("/")
+    window.location.reload()
+  }
+  
+  const loginauth =()=>{
+    navigate("/category")
+    window.location.reload()
   }
   return (
-
+   
     <div>
+       { token ? (
+    
       <div className="header">
         <div className="header__search">
           <ul id="menu" className={click ? "nav-menu active" : "nav-menu"}>
@@ -37,16 +47,16 @@ function Navbar({ visible, show }) {
               </a>
             </li>
             <li>
-              <a href="/productlist/" className="nav-link">
+              <a href="/productlist/:id" className="nav-link">
                 <FaInfo size={ICON_SIZE} />
                 <span>Products</span>
               </a>
             </li>
             <li>
-              <a href="/category" className="nav-link">
+              <Link to={"/category"} className="nav-link">
                 <FaInfo size={ICON_SIZE} />
-                <span>category</span>
-              </a>
+                <span style={{color:"black"}}>category</span>
+              </Link>
             </li>
             <li>
               <a href="/orders" className="nav-link">
@@ -62,7 +72,7 @@ function Navbar({ visible, show }) {
             </li>
             {token ? <>
        <button className="btn btn-danger" onClick={logout}>logout</button>
-       </> :<>      <button className="btn btn-danger" onClick={()=>navigate("/")}>login</button></>
+       </> :<>      <button className="btn btn-danger" onClick={loginauth}>login</button></>
     }
           </ul>
         </div>
@@ -79,6 +89,8 @@ function Navbar({ visible, show }) {
           </div>
         </div>
       </div>
+      ):<>
+         </>}
     </div>
   );
 }

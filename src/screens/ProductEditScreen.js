@@ -15,8 +15,8 @@ const ProductEditScreen = () => {
   const [product, setproduct] = useState({
     product_title: "",
     description: "",
-    category: "",
-    sub_category: "",
+    category:localStorage.getItem("Cateid"),
+    sub_category:"",
     sku_code: "",
     no_of_products: "",
     actual_price: "",

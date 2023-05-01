@@ -13,15 +13,23 @@ import Editcategory from "./screens/Editcategory";
 import Subcategory from "./screens/Subcategory";
 import Editsubcategry from "./screens/Editsubcategry";
 import Subcategrysub from "./screens/Subcategrysub";
+import { useEffect } from "react";
 
 function App() {
   const token = JSON.parse(localStorage.getItem("adminLoginStatus"))
- 
+  useEffect(()=>{
+<>
+<Login />
+
+</>
+  },[])
+  
   return (
     <BrowserRouter>
     
     
-      <Navbar />
+    
+    <Navbar />
       
 
       <Routes>

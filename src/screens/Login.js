@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
 import { Navigate } from "react-router-dom";
+const token = localStorage.getItem("admin_token");
 const Login = () => {
     let navigate = useNavigate()
     const [userLoginData, setuserLoginData] = useState({
@@ -27,19 +29,33 @@ const Login = () => {
                 if (res.data.bool === true) {
                     localStorage.setItem('adminLoginStatus', true);
                     localStorage.setItem('admin_token', res.data.token);
-                    navigate('/dashboard');
+                    navigate('/category');
                     console.log(res)
                 } else {
                    alert("wrong input")
+                   Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                    
+                  });
                 }
             });
         } catch (error) {
-            console.log(error)
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+                
+              });
         }
     }
 
     return (
         <div>
+             { token ? <>
+             
+             </>:
             <section className="vh-100 gradient-custom">
                 <div className="container py-5 h-100">
                     <div className="row d-flex justify-content-center align-items-center h-100">
@@ -56,7 +72,9 @@ const Login = () => {
                                             <input name='password' onChange={handleChange} type="password" placeholder='Password' id="typePasswordX" className="form-control form-control-lg" />
                                         </div>
                                         {/* <Link to={"/dashboard"}><button className="btn btn-outline-light btn-lg px-5 btn-primary" type="submit">Login</button></Link> */}
+                                      
                                         <button className="btn btn-outline-light btn-lg px-5 btn-primary" onClick={submitForm} type="submit">Login</button>
+                                   
                                     </div>
                                     {/* <div>
                                         <p className="mb-0">Don't have an account? <a href="#!" className="text-white-50 fw-bold">Sign Up</a>
@@ -68,6 +86,7 @@ const Login = () => {
                     </div>
                 </div>
             </section>
+}
         </div>
     )
 }

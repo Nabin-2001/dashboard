@@ -21,7 +21,8 @@ const Category = () => {
       .get("http://13.50.236.236/super-admin/all-category/")
       .then((res) => {
         Setcategry(res.data.data);
-        console.log(categry);                                   
+        console.log(categry); 
+                                     
       })
       .catch((err) => {
         console.log(err);
@@ -131,6 +132,7 @@ localStorage.setItem("Cateid",id)
   
   //  edit category end =======================================================================================================
   
+
   return (
     <div>
       <h1 className="text-center">Category</h1>

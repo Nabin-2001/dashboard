@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { FaTrash } from "react-icons/fa";
 const token = localStorage.getItem("admin_token");
 const url = "http://13.50.236.236";
 const Subcategrysub = () => {
@@ -109,6 +110,32 @@ const [Data, setData] = useState({
   const subcatedata = (id) =>{
      console.log(id)
   }
+  
+
+  const deleteitem = (id) => {
+    axios
+      .delete(`http://13.50.236.236/super-admin/delete-sub-category/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      .then((res) => {
+        if (res.data.status == 200) {
+          Swal.fire({
+            position: "top-middle",
+            icon: "success",
+            title: "product deleted successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          getsubdata()
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div>
       <div className="container-fluid">
@@ -146,6 +173,12 @@ const [Data, setData] = useState({
                     </td>
                   
                     <td>{item.sub_category}</td>
+                    <span
+                        className="btn btn-danger me-2"
+                        onClick={() => deleteitem(item.id)}
+                      >
+                        <FaTrash size={20} style={{color:"red"}} />
+                      </span>
                   </tr>
                 </>
               );
