@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import { Navigate } from "react-router-dom";
+import './../styles/login.css'
 const token = localStorage.getItem("admin_token");
 const Login = () => {
     let navigate = useNavigate()
@@ -52,30 +53,46 @@ const Login = () => {
     }
 
     return (
-        <div>
+        <>
              { token ? <>
              
              </>:
-            <section className="vh-100 gradient-custom">
-                <div className="container py-5 h-100">
-                    <div className="row d-flex justify-content-center align-items-center h-100">
-                        <div className="col-12 col-md-8 col-lg-6 col-xl-5">
-                            <div className="card bg-transparent border-0 text-white" >
-                                <div className="card-body p-5 text-center">
-                                    <div className="mb-md-3 mt-md-2 ">
-                                        <h2 className="fw-bold mb-3 text-uppercase te">Login</h2>
-                                        <p className="text-white-50 mb-4">Please enter your email and password!</p>
-                                        <div className="form-outline form-white mb-5">
+            <section className="vh-100 gradient-custom " >
+                <div className="content  h-100 m-0">
+                    <div className="row d-flex align-items-center h-100">
+                        <div className='col-md-8 login-container  col-sm-12 '>
+                            <div className='banner'>
+                                
+
+                            </div>
+
+                        </div>
+                        <div className="col-4 col-md-4 col-lg-4 card-top col-sm-12 ">
+                            <div className="card  border-0 text-white" >
+                                <div className="card-body  ">
+                                    <form className="mb-md-3 mt-md-2 ">
+                                        <div className='heading text-center'>
+                                        <h2 className="fw-bold mb-3 text-uppercase te" style={{color:"black"}}>Login</h2>
+                                        <p className=" mb-4" style={{color:"black"}}>Please enter your email and password!</p>
+
+                                        </div>
+                                       
+                                        <div className="form-outline form-white mb-3">
+                                            <label>Enter Your Email</label>
                                             <input name='username' onChange={handleChange} type="email" id="typeEmailX" placeholder='Email' className="form-control form-control-lg" />
                                         </div>
-                                        <div className="form-outline form-white mb-5">
+                                        <div className="form-outline form-white mb-3">
+                                        <label>Enter Your Password</label>
+
                                             <input name='password' onChange={handleChange} type="password" placeholder='Password' id="typePasswordX" className="form-control form-control-lg" />
                                         </div>
-                                        {/* <Link to={"/dashboard"}><button className="btn btn-outline-light btn-lg px-5 btn-primary" type="submit">Login</button></Link> */}
+                                        <div className='footer d-flex justify-content-center'>
+                                        <button className="btn btn-outline-light btn-lg px-5 btn-primary m-3" onClick={submitForm} type="submit">Login</button>
+
+                                        </div>
                                       
-                                        <button className="btn btn-outline-light btn-lg px-5 btn-primary" onClick={submitForm} type="submit">Login</button>
                                    
-                                    </div>
+                                    </form>
                                     {/* <div>
                                         <p className="mb-0">Don't have an account? <a href="#!" className="text-white-50 fw-bold">Sign Up</a>
                                         </p>
@@ -87,7 +104,7 @@ const Login = () => {
                 </div>
             </section>
 }
-        </div>
+        </>
     )
 }
 

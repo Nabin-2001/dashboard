@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
-  FaThLarge,
+  
   FaBars,
-  FaAddressBook,
   FaInfo,
   FaBook,
   FaHome,
   FaUsers,
-  FaHandshake,
   FaTimes,
+  FaShoppingBag,
 } from "react-icons/fa";
+import {AiOutlineLogout} from 'react-icons/ai';
+import {MdShoppingCart} from "react-icons/md"
+import {BiCategory} from "react-icons/bi";
 import { useNavigate} from "react-router";
 import { Link } from "react-router-dom";
 import Login from "../screens/Login";
@@ -48,25 +50,31 @@ function Navbar({ visible, show }) {
             </li>
             <li>
               <a href="/productlist/:id" className="nav-link">
-                <FaInfo size={ICON_SIZE} />
+                <MdShoppingCart size={ICON_SIZE} />
                 <span>Products</span>
               </a>
             </li>
             <li>
               <Link to={"/category"} className="nav-link">
-                <FaInfo size={ICON_SIZE} />
+                <BiCategory size={ICON_SIZE} />
                 <span style={{color:"black"}}>category</span>
               </Link>
             </li>
             <li>
+              <Link to={"/category"} className="nav-link">
+                <FaInfo size={ICON_SIZE} />
+                <span style={{color:"black"}}>Add brands</span>
+              </Link>
+            </li>
+            <li>
               <a href="/orders" className="nav-link">
-                <FaBook size={ICON_SIZE} />
+                <FaShoppingBag/>
                 <span>Orders</span>
               </a>
             </li>
             <li>
               <a href="/user" className="nav-link">
-                <FaHandshake size={ICON_SIZE} />
+                <FaUsers size={ICON_SIZE}/>
                 <span>Users</span>
               </a>
             </li>

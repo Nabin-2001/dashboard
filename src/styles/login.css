@@ -1,0 +1,58 @@
+.content{
+    background-color:#B3E0FF;
+}
+section{
+    background-color:#B3E0FF;
+
+
+}
+.card{
+    background-color:#B3E0FF;
+    height:100vh;
+    border-radius:0px !important;
+}
+label{
+    color:black;
+    margin:8px;
+}
+input{
+    border:none;
+    outline:none;
+
+}
+.form-control:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #0d6efd;
+    outline: 0;
+    box-shadow:0 0 0 0.25rem rgb(255 255 255 / 25%);
+}
+.btn:hover{
+    border:1px solid #0d6efd;
+    color:#0d6efd;
+
+}
+.btn{
+    border:1px solid #0d6efd;
+    outline:none;
+}
+
+
+.login-container{
+    height:100vh;
+    background-image:url('./../assets/login-banner.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position:center
+}
+.card-top{
+    margin:0px;
+    padding:0px;
+}
+.card-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
