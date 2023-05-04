@@ -74,10 +74,12 @@ nav{
 }
 
 .logo{
-	display: block;
-	width: 100px;
-	margin: auto;
-	background:transparent;
+	width: 100%;
+    margin: auto;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+	
 }
 
 .logo img{
@@ -91,9 +93,7 @@ nav{
 	align-items: center;
 	color: #000;
 	text-decoration: none;
-	padding: 10px 1rem;
 	border-radius: 5px;
-	margin-bottom: 5px;
 }
 
 .nav-link:hover{

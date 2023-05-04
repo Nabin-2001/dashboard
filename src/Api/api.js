@@ -1,1 +1,1 @@
-export const url="http://13.50.236.236/super-admin/"
+export const url="http://13.50.248.3/super-admin/"

@@ -26,11 +26,11 @@ const Login = () => {
         userFormData.append('username', userLoginData.username)
         userFormData.append('password', userLoginData.password)
         try {
-            axios.post("http://13.50.236.236/super-admin/login/", userFormData).then((res) => {
+            axios.post("http://13.50.248.3/super-admin/login/", userFormData).then((res) => {
                 if (res.data.bool === true) {
                     localStorage.setItem('adminLoginStatus', true);
                     localStorage.setItem('admin_token', res.data.token);
-                    navigate('/category');
+                    navigate('/dashboard');
                     console.log(res)
                 } else {
                    alert("wrong input")

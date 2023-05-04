@@ -26,18 +26,19 @@ function App() {
   
   return (
     <BrowserRouter>
-    <section>
-      <div className="content">
+    
+      <div className="main">
         <div className="row col-12">
-          <div className="col-2">
-          <Navbar />
-          </div>
+         
+          <Navbar/>
+         
+          
           
           <Routes>
         <Route path="/" element={<Login />} />
          { token ? (
           <>
-          <div className="col-10">
+
  <Route path="/dashboard" element={<DashboardScreen />} />
  <Route path="/productlist/:id" element={<Productlist />} />
  <Route path="/product/:id" element={<ProductEditScreen />} />
@@ -49,7 +50,7 @@ function App() {
  <Route path="/editcategory/:id" element={<Editcategory/>}/>
  <Route path="/subcategrysub/:id" element={<Subcategrysub/>}/>
  <Route path="/editsubcategry/:id" element={<Editsubcategry />} />
- </div>
+ 
  </>
  
          ):<>
@@ -57,11 +58,12 @@ function App() {
          </>}
        
       </Routes>
+         
           </div>
 
         
       </div>
-    </section>
+    
   
     
     
