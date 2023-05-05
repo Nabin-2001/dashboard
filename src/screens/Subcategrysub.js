@@ -8,7 +8,20 @@ const url = "http://13.50.248.3";
 const Subcategrysub = () => {
   const [subcatesub, setsubcatesub] = useState([]);
   const { id } = useParams();
-  
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       `http://13.50.248.3/super-admin/particular-sub-category-sub-category-list/${id}/`
+  //     )
+  //     .then((res) => {
+  //       setsubcatesub(res.data.data);
+  //       console.log(subcatesub);
+  //       console.log(res.data.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   function getsubdata() {
     axios
@@ -62,7 +75,7 @@ const [Data, setData] = useState({
     formData.append("sub_category_img", Data.sub_category_img);
     try {
       axios
-        .post(`http://13.50.236.236/super-admin/add-sub-category/`, formData, {
+        .post(`http://13.50.248.3/super-admin/add-sub-category/`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -101,7 +114,7 @@ const [Data, setData] = useState({
 
   const deleteitem = (id) => {
     axios
-      .delete(`http://13.50.236.236/super-admin/delete-sub-category/${id}/`, {
+      .delete(`http://13.50.248.3/super-admin/delete-sub-category/${id}/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

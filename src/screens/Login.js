@@ -32,6 +32,7 @@ const Login = () => {
                     localStorage.setItem('admin_token', res.data.token);
                     navigate('/dashboard');
                     console.log(res)
+                    window.location.reload()
                 } else {
                    alert("wrong input")
                    Swal.fire({

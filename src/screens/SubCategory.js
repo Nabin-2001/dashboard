@@ -125,10 +125,8 @@ const [subcategory,setsubcategory]=useState([])
     // add subcategory end ==========================================================================================================================
     const sub1 =(id) =>{
   Navigate(`/subcategrysub/${id}`)
- 
-
-      
     }
+    
     const filterdata = subcategory.filter(item=>!item.sub_cat_id)
     console.log("filterdata",filterdata)
   return (

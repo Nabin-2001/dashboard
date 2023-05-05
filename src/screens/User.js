@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 export const User = () => {
   const [user,setuser]=useState([])
   useEffect(()=>{
-    axios.get("http://13.50.236.236/super-admin/all-customers/")
+    axios.get("http://13.50.248.3/super-admin/all-customers/")
     .then((res)=>{
        setuser(res.data.data)
      

@@ -23,7 +23,7 @@ const Editsubcategry = () => {
        
         axios
           .put(
-            `http://13.50.236.236/super-admin/edit-sub-category/${id}/`,
+            `http://13.50.248.3/super-admin/edit-sub-category/${id}/`,
             formData,
             {
               headers: {

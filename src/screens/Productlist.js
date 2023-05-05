@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { url } from "./../Api/api";
 import Swal from "sweetalert2";
 import "../styles/category.css";
@@ -19,9 +19,12 @@ const token = localStorage.getItem("admin_token");
 const Productlist = () => {
   const [product, setProduct] = useState();
 
+  const navigate = useNavigate()
   const [show, setShow] = useState(false);
-   
-  const {id}=useParams()
+
+  const { id } = useParams();
+
+  const [brand, setbrand] = useState([]);
 
   const [createProduct, setCreateProduct] = useState({
     product_title: "",
@@ -36,13 +39,13 @@ const Productlist = () => {
 
     color: "",
 
-    sub_category:id,
+    sub_category: id,
 
     description: "",
 
     brand: "",
 
-    category:localStorage.getItem("Cateid"),
+    category: localStorage.getItem("Cateid"),
 
     images1: "",
 
@@ -60,7 +63,7 @@ const Productlist = () => {
   function fetchproduct() {
     axios
 
-      .get(`${url}all-products`, {
+      .get(`http://13.50.248.3/super-admin/particular-sub-cat-products/${id}/`, {
         headers: {
           Authorization: `bearer ${token}`,
         },
@@ -73,21 +76,34 @@ const Productlist = () => {
       })
 
       .catch((err) => console.log(err));
-  };
+  }
 
-  //deleting producting
+  //delete producting
+
+  //  brand functionality
+
+  useEffect(() => {
+    axios
+      .get("http://13.50.248.3/api/all-brands/")
+      .then((res) => {
+        console.log("brand data", res.data.data);
+        setbrand(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const deleteProduct = (item) => {
     axios
 
-      .delete(`${url}delete-product/${item.id}`, {
+      .delete(`http://13.50.248.3/super-admin/delete-product/${item.id}`, {
         headers: {
           Authorization: `bearer ${token}`,
         },
       })
 
       .then((res) => {
-        
         if (res.data.status == 200) {
           Swal.fire({
             position: "top-middle",
@@ -96,7 +112,7 @@ const Productlist = () => {
             showConfirmButton: false,
             timer: 1500,
           });
-          fetchproduct()
+          fetchproduct();
         }
       })
       .catch((err) => {
@@ -134,16 +150,16 @@ const Productlist = () => {
     formData.append("images", createProduct.images);
     formData.append("images", createProduct.images);
     formData.append("thumbnail", createProduct.thumbnail);
-
+  console.log(createProduct.brand)
     try {
       axios
-        .post(`http://13.50.236.236/super-admin/add-product/`, formData, {
+        .post(`http://13.50.248.3/super-admin/add-product/`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
-          console.log(res)
+        console.log("brand data",  createProduct.brand)
           if (res.data.status == 200) {
             Swal.fire({
               position: "top-middle",
@@ -152,33 +168,31 @@ const Productlist = () => {
               showConfirmButton: false,
               timer: 1500,
             });
-           fetchproduct()
-          
+            fetchproduct();
           } else {
             Swal.fire({
               icon: "error",
               title: "Oops...",
               text: "Something went wrong!",
-              
             });
           }
         });
     } catch (error) {
       console.log(error);
     }
-    console.log(createProduct.product_title);
-    console.log(createProduct.sku_code);
-    console.log(createProduct.no_of_products);
-    console.log(createProduct.actual_price);
-    console.log(createProduct.selling_price);
-    console.log(createProduct.color);
-    console.log(createProduct.sub_category);
-    console.log(createProduct.description);
-    console.log(createProduct.brand);
-    console.log(createProduct.category);
-    console.log(createProduct.images1);
-    console.log(createProduct.images2);
-    console.log(createProduct.thumbnail);
+    // console.log(createProduct.product_title);
+    // console.log(createProduct.sku_code);
+    // console.log(createProduct.no_of_products);
+    // console.log(createProduct.actual_price);
+    // console.log(createProduct.selling_price);
+    // console.log(createProduct.color);
+    // console.log(createProduct.sub_category);
+    // console.log(createProduct.description);
+    // console.log(createProduct.brand);
+    // console.log(createProduct.category);
+    // console.log(createProduct.images1);
+    // console.log(createProduct.images2);
+    // console.log(createProduct.thumbnail);
   };
 
   useEffect(() => {
@@ -232,7 +246,7 @@ const Productlist = () => {
 
                       <td>
                         <img
-                          src={"http://13.50.236.236" + item.thumbnail}
+                          src={"http://13.50.248.3" + item.thumbnail}
                           alt=""
                           className="categry_img"
                         />
@@ -274,7 +288,6 @@ const Productlist = () => {
               className="mb-3 d-flex"
               controlId="exampleForm.ControlInput1"
             >
-              
               <Form.Control
                 type="text"
                 placeholder="Product_Title"
@@ -373,7 +386,6 @@ const Productlist = () => {
                 name="thumbnail"
                 autoFocus
                 onChange={handleFileChange}
-               
               />
             </Form.Group>
 
@@ -402,13 +414,33 @@ const Productlist = () => {
               className="mb-3 d-flex"
               controlId="exampleForm.ControlTextarea1"
             >
-              <Form.Control
+              {/* <Form.Control
                 type="number"
                 placeholder="brand"
                 name="brand"
                 autoFocus
                 onChange={handleInputChange}
-              />
+              /> */}
+              <select
+                type="number"
+                placeholder="brand"
+                name="brand"
+                autoFocus
+                onChange={handleInputChange}
+                className="form-control"
+              >
+                {brand.map((item) => {
+                  return (
+                    <>
+                      <option  value={item.id}>{item.brand_name}</option>
+                      
+                    </>
+                    
+                  );
+                
+                })}
+                
+              </select>
             </Form.Group>
 
             <button className="btn btn-primary" type="submit">

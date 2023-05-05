@@ -24,7 +24,7 @@ export const DashboardScreen = () => {
           <div className="heading">
             <h3 className="home-heading">Hi, Welcome back</h3>
           </div>
-          <div className="row ">
+          <div className="row " id="row">
             <div className="home-card col-md-6 col-sm-12 col-xl-3">
               <div className="home-body">
                 <div className="left-col">
