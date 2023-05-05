@@ -4,29 +4,16 @@ import { Link, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FaTrash } from "react-icons/fa";
 const token = localStorage.getItem("admin_token");
-const url = "http://13.50.236.236";
+const url = "http://13.50.248.3";
 const Subcategrysub = () => {
   const [subcatesub, setsubcatesub] = useState([]);
   const { id } = useParams();
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       `http://13.50.236.236/super-admin/particular-sub-category-sub-category-list/${id}/`
-  //     )
-  //     .then((res) => {
-  //       setsubcatesub(res.data.data);
-  //       console.log(subcatesub);
-  //       console.log(res.data.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
+  
 
   function getsubdata() {
     axios
         .get(
-          `http://13.50.236.236/super-admin/particular-sub-category-sub-category-list/${id}/`
+          `http://13.50.248.3/super-admin/particular-sub-category-sub-category-list/${id}/`
         )
         .then((res) => {
           setsubcatesub(res.data.data);

@@ -17,7 +17,7 @@ const Editcategory = () => {
  
 
   useEffect(()=>{
-    axios.get(`http://13.50.236.236/super-admin/category-details/${id}/`)
+    axios.get(`http://13.50.248.3/super-admin/category-details/${id}/`)
     .then((res)=>{
     SetProduct(res.data)
     })
@@ -46,7 +46,7 @@ const Editcategory = () => {
     formData.append("category_image", product.category_image);
     axios
       .put(
-        `http://13.50.236.236/super-admin/edit-category/${id}/`,
+        `http://13.50.248.3/super-admin/edit-category/${id}/`,
         formData,
         {
           headers: {

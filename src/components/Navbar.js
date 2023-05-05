@@ -33,11 +33,11 @@ function Navbar({ visible, show }) {
     window.location.reload()
   }
   
-  const loginauth =()=>{
-    navigate("/category")
-    window.location.reload()
-  }
-  return (
+  // const loginauth =()=>{
+  //   navigate("/category")
+  //   window.location.reload()
+  // }
+  return (    
    
    <div className="col-md-2">
        { token ? (
@@ -55,7 +55,7 @@ function Navbar({ visible, show }) {
               </Link>
             </li>
             <li>
-              <Link to={"/productlist/:id"} className="nav-link">
+              <Link to={"/Allproducts"} className="nav-link">
                 <MdShoppingCart size={ICON_SIZE} />
                 <span>Products</span>
               </Link>
@@ -67,7 +67,7 @@ function Navbar({ visible, show }) {
               </Link>
             </li>
             <li>
-              <Link to={"/category"} className="nav-link">
+              <Link to={"/Brand"} className="nav-link">
                 <BsFillCartPlusFill size={ICON_SIZE} />
                 <span >Add brands</span>
               </Link>
@@ -87,7 +87,7 @@ function Navbar({ visible, show }) {
             <div className="login-btn">
           {token ? <>
        <button className="btn-login" onClick={logout}> <AiOutlineLogout/>logout</button>
-       </> :<>      <button className="btn-login" onClick={loginauth}>login</button></>
+       </> :<>      <button className="btn-login" >login</button></>
     }
 
           </div>

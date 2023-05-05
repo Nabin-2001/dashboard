@@ -5,7 +5,7 @@ import "../styles/category.css";
 import { FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import Swal from "sweetalert2";
-const url = "http://13.50.236.236";
+const url = "http://13.50.248.3";
 const token = localStorage.getItem("admin_token");
 const cateid = JSON.parse(localStorage.getItem("categry_id"));
 const Category = () => {
@@ -18,7 +18,7 @@ const Category = () => {
   function getstoredata() {
     // localStorage.setItem("CateId",id)
     axios
-      .get("http://13.50.236.236/super-admin/all-category/")
+      .get("http://13.50.248.3/super-admin/all-category/")
       .then((res) => {
         Setcategry(res.data.data);
         console.log(categry); 
@@ -37,7 +37,7 @@ const Category = () => {
 
   const deleteitem = (id) => {
     axios
-      .delete(`http://13.50.236.236/super-admin/delete-category/${id}/`, {
+      .delete(`http://13.50.248.3/super-admin/delete-category/${id}/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -95,7 +95,7 @@ localStorage.setItem("Cateid",id)
     formData.append("category_image", Data.category_image);
     try {
       axios
-        .post("http://13.50.236.236/super-admin/add-category/", formData, {
+        .post("http://13.50.248.3/super-admin/add-category/", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

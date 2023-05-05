@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { FaTrash } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 const token = localStorage.getItem("admin_token");
-const url = "http://13.50.236.236";
+const url = "http://13.50.248.3";
 
 const SubCategory = () => {
   const Navigate = useNavigate()
@@ -14,7 +14,7 @@ const [subcategory,setsubcategory]=useState([])
     const {id}=useParams()
     function getstoredata() {
       axios
-        .get(`http://13.50.236.236/super-admin/particular-category-sub-category-list/${id}/`)
+        .get(`${url}/super-admin/particular-category-sub-category-list/${id}/`)
         .then((res) => {
           setsubcategory(res.data.data);
           console.log(subcategory);  
@@ -31,7 +31,7 @@ const [subcategory,setsubcategory]=useState([])
 
     const deleteitem = (id) => {
       axios
-        .delete(`http://13.50.236.236/super-admin/delete-sub-category/${id}/`, {
+        .delete(`${url}/super-admin/delete-sub-category/${id}/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -91,7 +91,7 @@ const [subcategory,setsubcategory]=useState([])
       formData.append("sub_category_img", Data.sub_category_img);
       try {
         axios
-          .post("http://13.50.236.236/super-admin/add-sub-category/", formData, {
+          .post(`${url}/super-admin/add-sub-category/`, formData, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -162,7 +162,7 @@ const [subcategory,setsubcategory]=useState([])
               <td>{index+1}</td>
               <td>
               <img  onClick={()=>sub1(item.id)}
-                        src={url + item.sub_category_img}
+                        src={ url + item.sub_category_img}
                         className="categry_img"
                        
                       />

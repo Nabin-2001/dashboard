@@ -13,7 +13,11 @@ import Editcategory from "./screens/Editcategory";
 import Subcategory from "./screens/SubCategory";
 import Editsubcategry from "./screens/Editsubcategry";
 import Subcategrysub from "./screens/Subcategrysub";
+import Brand from "./screens/Brand";
+import Allproducts from "./screens/Allproducts";
+import Review from "./screens/Review";
 import { useEffect } from "react";
+
 
 function App() {
   const token = JSON.parse(localStorage.getItem("adminLoginStatus"))
@@ -50,6 +54,9 @@ function App() {
  <Route path="/editcategory/:id" element={<Editcategory/>}/>
  <Route path="/subcategrysub/:id" element={<Subcategrysub/>}/>
  <Route path="/editsubcategry/:id" element={<Editsubcategry />} />
+ <Route path="/Brand" element={<Brand />} />
+ <Route path="/Allproducts" element={<Allproducts />} />
+ <Route path="/Review/:id" element={<Review />} />
  
  </>
  
